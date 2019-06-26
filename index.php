@@ -12,13 +12,13 @@
 
     if($text)
     {
-        if ($text == "/start") 
+        if ($text == "/start")
         {
-            if (strlen($name) != 0) 
+            if (strlen($name) != 0)
             {
                 $reply = "Добро пожаловать, ".$name."!";
             }
-            else 
+            else
             {
                 $reply = "Добро пожаловать, Незнакомец";
             }
@@ -27,7 +27,8 @@
         }
         elseif ($text == "/help")
         {
-            $reply = "Даннный бот прдназначен для сокращения и расшифровки сокращенныйх ссылок при помощи сервиса goo.gl.\n Чтобы воспользоваться ботом, используйте клавиатуру.";
+            $reply = "Даннный бот прдназначен для сокращения и расшифровки сокращенныйх ссылок при помощи сервиса goo.gl. Чтобы воспользоваться ботом, используйте клавиатуру.";
+            $reply_markup = $telegram->replyKeyboardMarkup([ 'keyboard' => $keyboard, 'resize_keyboard' => true, 'one_time_keyboard' => false ]);
             $telegram->sendMessagе([ 'chat_id' => $chat_id, 'text' => $reply ]);
         }
     }
