@@ -29,7 +29,19 @@
         {
             $reply = "Даннный бот прдназначен для сокращения и расшифровки сокращенныйх ссылок при помощи сервиса goo.gl. Чтобы воспользоваться ботом, используйте клавиатуру.";
             $reply_markup = $telegram->replyKeyboardMarkup([ 'keyboard' => $keyboard, 'resize_keyboard' => true, 'one_time_keyboard' => false ]);
-            $telegram->sendMessagе([ 'chat_id' => $chat_id, 'text' => $reply ]);
+            $telegram->sendMessagе([ 'chat_id' => $chat_id, 'text' => $reply, 'reply_markup' => $reply_markup ]);
+        }
+        elseif ($text == "Расшифровать ссылку")
+        {
+            $reply = "Введите сокращенную ссылку (goo.gl)";
+            $reply_markup = $telegram->replyKeyboardMarkup([ 'keyboard' => $keyboard, 'resize_keyboard' => true, 'one_time_keyboard' => false ]);
+            $telegram->sendMessagе([ 'chat_id' => $chat_id, 'text' => $reply, 'reply_markup' => $reply_markup ]);
+        }
+        elseif ($text == "Сократить ссылку")
+        {
+            $reply = "Введите несокращенную ссылку";
+            $reply_markup = $telegram->replyKeyboardMarkup([ 'keyboard' => $keyboard, 'resize_keyboard' => true, 'one_time_keyboard' => false ]);
+            $telegram->sendMessagе([ 'chat_id' => $chat_id, 'text' => $reply, 'reply_markup' => $reply_markup ]);
         }
     }
     else
