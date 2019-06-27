@@ -1,51 +1,50 @@
 <?php
-	include('vendor/autoload.php'); //Подключаем библиотеку
+    include('vendor/autoload.php'); //Подключаем библиотеку
     use Telegram\Bot\Api;
 
-    $telegram = new Api('885752742:AAF63rND57OidzVAJ3ReDp7qGkX7oVaunBY'); //Устанавливаем токен, полученный у BotFather
-    $result = $telegram -> getWebhookUpdates(); //Передаем в переменную $result полную информацию о сообщении пользователя
+    $telegram = new Api('885752742:AAF63rND57OidzVAJ3ReDp7qGkX7oVaunBY');
+    $result = $telegram->getWebhookUpdates();
+    $text = $result["message"]["text"];
+    $chat_id = $result["message"]["chat"]["id"];
+    $name = $result["message"]["from"]["username"];
 
-    $text = $result["message"]["text"]; //Текст сообщения
-    $chat_id = $result["message"]["chat"]["id"]; //Уникальный идентификатор пользователя
-    $name = $result["message"]["from"]["username"]; //Юзернейм пользователя
-    $keyboard = [["Сократить ссылку"],["Расшифровать ссылку"]]; //Клавиатура
-
-    if($text)
-    {
-        if ($text == "/start")
-        {
-            if (strlen($name) != 0)
-            {
-                $reply = "Добро пожаловать, ".$name."!";
+    if($text){
+        if ($text == '/start') {
+            if (strlen($name) == 0) {
+                $reply = 'Добро пожаловать, Незнакомец!';
             }
-            else
-            {
-                $reply = "Добро пожаловать, Незнакомец";
+            else {
+                $reply = 'Добро пожаловать, '.$name.'!';
             }
-            $reply_markup = $telegram->replyKeyboardMarkup([ 'keyboard' => $keyboard, 'resize_keyboard' => true, 'one_time_keyboard' => false ]);
-            $telegram->sendMessage([ 'chat_id' => $chat_id, 'text' => $reply, 'reply_markup' => $reply_markup ]);
+            $telegram->sendMessage([ 'chat_id' => $chat_id, 'text' => $reply]);
         }
-        elseif ($text == "/help")
-        {
-            $reply = "Даннный бот прдназначен для сокращения и расшифровки сокращенныйх ссылок при помощи сервиса goo.gl. Чтобы воспользоваться ботом, используйте клавиатуру.";
-            $reply_markup = $telegram->replyKeyboardMarkup([ 'keyboard' => $keyboard, 'resize_keyboard' => true, 'one_time_keyboard' => false ]);
-            $telegram->sendMessagе([ 'chat_id' => $chat_id, 'text' => $reply, 'reply_markup' => $reply_markup ]);
+        elseif ($text == '/help') {
+            $reply = 'Данный бот предназначен для работы со ссылками. Он умеет сокращать или расшифровывать уже сокращённые ссылки. Для того, чтобы воспользоваться ботом, отправьте ему ссылку, которую необходимо сократить.';
+            $telegram->sendMessage([ 'chat_id' => $chat_id, 'text' => $reply ]);
         }
-        elseif ($text == "Расшифровать ссылку")
-        {
-            $reply = "Введите сокращенную ссылку (goo.gl)";
-            $reply_markup = $telegram->replyKeyboardMarkup([ 'keyboard' => $keyboard, 'resize_keyboard' => true, 'one_time_keyboard' => false ]);
-            $telegram->sendMessagе([ 'chat_id' => $chat_id, 'text' => $reply, 'reply_markup' => $reply_markup ]);
-        }
-        elseif ($text == "Сократить ссылку")
-        {
-            $reply = "Введите несокращенную ссылку";
-            $reply_markup = $telegram->replyKeyboardMarkup([ 'keyboard' => $keyboard, 'resize_keyboard' => true, 'one_time_keyboard' => false ]);
-            $telegram->sendMessagе([ 'chat_id' => $chat_id, 'text' => $reply, 'reply_markup' => $reply_markup ]);
+        else {
+            $telegram->sendMessage([ 'chat_id' => $chat_id, 'text' => getSmallLink($text)]);
         }
     }
-    else
-    {
-    	$telegram->sendMessage([ 'chat_id' => $chat_id, 'text' => "Отправьте текстовое сообщение." ]);
+    else {
+        $telegram->sendMessage([ 'chat_id' => $chat_id, 'text' => 'Отправьте текстовое сообщение.' ]);
+    }
+
+    function getSmallLink($longurl){
+        $url = "http://api.bit.ly/shorten?version=2.0.1&longUrl=$longurl&login=o_4dkf0dhc6p&apiKey=R_a9dbe6c319fe4397946c86b8798b7abb&format=json&history=1";
+        $s = curl_init();
+        curl_setopt($s,CURLOPT_URL, $url);
+        curl_setopt($s,CURLOPT_HEADER,false);
+        curl_setopt($s,CURLOPT_RETURNTRANSFER,1);
+        $result = curl_exec($s);
+        curl_close( $s );
+        $obj = json_decode($result, true);
+        $res = $obj["results"]["$longurl"]["shortUrl"];
+        if (strlen($res) != 0) {
+            return 'Ссылка сокращена - '.$res;
+        }
+        else {
+            return 'Ссылка некорректна';
+        }
     }
 ?>
