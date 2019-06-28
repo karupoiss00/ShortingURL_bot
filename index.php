@@ -35,14 +35,14 @@
     }
 	
 	function stringHandler($string) {
-		if(stristr($string, 'http://bit.ly/') === FALSE)) {
-			return createShortLink($string);
-		}
-		else {
+		if(stristr($string, 'bit.ly') !== FALSE)) {
 			return getLongUrl($string);
 		}
+		else {
+			return getSmallLink($string);		
+		}
 	}
-	/*
+
     function getSmallLink($longurl){
         $url = "http://api.bit.ly/shorten?version=2.0.1&longUrl=$longurl&login=o_4dkf0dhc6p&apiKey=R_a9dbe6c319fe4397946c86b8798b7abb&format=json&history=1";
         $s = curl_init();
@@ -60,25 +60,23 @@
             return 'Ссылка некорректна';
         }
     }
-	*/
 	
-	function createShortLink($long_url)
-	{
-		$long_url = urlencode($long_url);
-		$bitly_response = json_decode(file_get_contents('http://api.bit.ly/v3/shorten?login='.LOGIN.'&apiKey='.API_KEY.'&longUrl='.$long_url.'&format=json'));
-		$short_url = $bitly_response->data->url;
-		return $short_url;
-	}
 	function getLongUrl($shortUrl)
 	{
 		$query = http_build_query(
 			array(
-				'login' => LOGIN,
-				'apiKey' => API_KEY,
+				'login' => 'o_4dkf0dhc6p',
+				'apiKey' => 'R_a9dbe6c319fe4397946c86b8798b7abb',
 				'shortUrl' => $shortUrl,
 				'format' => 'txt'
 			)
 		);
-		return file_get_contents(sprintf('%s/%s?%s', END_POINT, 'expand', $query));
+		$res = file_get_contents(sprintf('%s/%s?%s', END_POINT, 'expand', $query));
+		if (strlen($res) != 0) {
+			return "Ссылка расшифрована - ".$res;
+		}
+		else { 
+			return "Ссылка некорректна";
+		}
 	}
 ?>
