@@ -63,8 +63,8 @@
 			)
 		);
 		$res = file_get_contents(sprintf('%s/%s?%s', END_POINT, 'expand', $query));
-		if ($res == 'NOT_FOUND') {
-			return "Ссылка некорректна";
+		if ($res == 'NOT_FOUND' or $res == 404) {
+			return "Ссылка не найдена";
 		}
 		else { 	
 			return "Ссылка расшифрована - ".$res;
