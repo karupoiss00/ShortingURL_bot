@@ -23,13 +23,22 @@
             $telegram->sendMessage([ 'chat_id' => $chat_id, 'text' => $reply ]);
         }
         else {
-            $telegram->sendMessage([ 'chat_id' => $chat_id, 'text' => getSmallLink($text)]);
+            $telegram->sendMessage([ 'chat_id' => $chat_id, 'text' => stringHandler($text)]);
         }
     }
     else {
         $telegram->sendMessage([ 'chat_id' => $chat_id, 'text' => 'Отправьте текстовое сообщение.' ]);
     }
-
+	
+	function stringHandler($string) {
+		if(stristr($string, 'http://bit.ly/') === FALSE)) {
+			return getSmallLink($string);
+		}
+		else {
+			return getSmallLink($string);
+		}
+	}
+	
     function getSmallLink($longurl){
         $url = "http://api.bit.ly/shorten?version=2.0.1&longUrl=$longurl&login=o_4dkf0dhc6p&apiKey=R_a9dbe6c319fe4397946c86b8798b7abb&format=json&history=1";
         $s = curl_init();
@@ -43,8 +52,26 @@
         if (strlen($res) != 0) {
             return 'Ссылка сокращена - '.$res;
         }
-        else {
+        elseif {
             return 'Ссылка некорректна';
         }
     }
+	
+	function getLongLink($shorturl) {
+		
+		$url = 'https://api-ssl.bitly.com/v3/expand?access_token=R_a9dbe6c319fe4397946c86b8798b7abb&shortUrl='.$shorturl.'&format=txt';
+        $s = curl_init();
+        curl_setopt($s,CURLOPT_URL, $url);
+        curl_setopt($s,CURLOPT_HEADER,false);
+        curl_setopt($s,CURLOPT_RETURNTRANSFER,1);
+        $result = curl_exec($s);
+        curl_close( $s );
+        
+        if (strlen($result) != 0) {
+            return 'Ссылка расшифрована - '.$result;
+        }
+        elseif {
+            return 'Ссылка некорректна';
+        }
+	}
 ?>
