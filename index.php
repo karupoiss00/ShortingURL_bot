@@ -1,7 +1,11 @@
 <?php
     include('vendor/autoload.php'); //Подключаем библиотеку
     use Telegram\Bot\Api;
-
+	
+	define('LOGIN', 'o_4dkf0dhc6p');
+	define('API_KEY', 'R_a9dbe6c319fe4397946c86b8798b7abb');
+	define('END_POINT', 'http://api.bit.ly/v3');
+	
     $telegram = new Api('885752742:AAF63rND57OidzVAJ3ReDp7qGkX7oVaunBY');
     $result = $telegram->getWebhookUpdates();
     $text = $result["message"]["text"];
@@ -32,13 +36,13 @@
 	
 	function stringHandler($string) {
 		if(stristr($string, 'http://bit.ly/') === FALSE)) {
-			return getSmallLink($string);
+			return createShortLink($string);
 		}
 		else {
-			return getSmallLink($string);
+			return getLongUrl($string);
 		}
 	}
-	
+	/*
     function getSmallLink($longurl){
         $url = "http://api.bit.ly/shorten?version=2.0.1&longUrl=$longurl&login=o_4dkf0dhc6p&apiKey=R_a9dbe6c319fe4397946c86b8798b7abb&format=json&history=1";
         $s = curl_init();
@@ -56,22 +60,25 @@
             return 'Ссылка некорректна';
         }
     }
+	*/
 	
-	function getLongLink($shorturl) {
-		
-		$url = 'https://api-ssl.bitly.com/v3/expand?access_token=R_a9dbe6c319fe4397946c86b8798b7abb&shortUrl='.$shorturl.'&format=txt';
-        $s = curl_init();
-        curl_setopt($s,CURLOPT_URL, $url);
-        curl_setopt($s,CURLOPT_HEADER,false);
-        curl_setopt($s,CURLOPT_RETURNTRANSFER,1);
-        $result = curl_exec($s);
-        curl_close( $s );
-        
-        if (strlen($result) != 0) {
-            return 'Ссылка расшифрована - '.$result;
-        }
-        elseif {
-            return 'Ссылка некорректна';
-        }
+	function createShortLink($long_url)
+	{
+		$long_url = urlencode($long_url);
+		$bitly_response = json_decode(file_get_contents('http://api.bit.ly/v3/shorten?login='.LOGIN.'&apiKey='.API_KEY.'&longUrl='.$long_url.'&format=json'));
+		$short_url = $bitly_response->data->url;
+		return $short_url;
+	}
+	function getLongUrl($shortUrl)
+	{
+		$query = http_build_query(
+			array(
+				'login' => LOGIN,
+				'apiKey' => API_KEY,
+				'shortUrl' => $shortUrl,
+				'format' => 'txt'
+			)
+		);
+		return file_get_contents(sprintf('%s/%s?%s', END_POINT, 'expand', $query));
 	}
 ?>
