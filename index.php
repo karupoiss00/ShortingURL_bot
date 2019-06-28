@@ -39,8 +39,8 @@
         $telegram->sendMessage([ 'chat_id' => $chat_id, 'text' => 'Отправьте текстовое сообщение.' ]);
     }
 
-    function getSmallLink($longurl){
-        $url = "http://api.bit.ly/shorten?version=2.0.1&longUrl=$longurl&login=o_4dkf0dhc6p&apiKey=R_a9dbe6c319fe4397946c86b8798b7abb&format=json&history=1";
+    function getShortUrl($longUrl){
+        $url = "http://api.bit.ly/shorten?version=2.0.1&longUrl=$longUrl&login=o_4dkf0dhc6p&apiKey=R_a9dbe6c319fe4397946c86b8798b7abb&format=json&history=1";
         $s = curl_init();
         curl_setopt($s,CURLOPT_URL, $url);
         curl_setopt($s,CURLOPT_HEADER,false);
@@ -48,7 +48,7 @@
         $result = curl_exec($s);
         curl_close( $s );
         $obj = json_decode($result, true);
-        $res = $obj["results"]["$longurl"]["shortUrl"];
+        $res = $obj["results"]["$longUrl"]["shortUrl"];
         if (strlen($res) != 0) {
             return 'Ссылка сокращена - '.$res;
         }
