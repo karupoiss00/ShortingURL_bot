@@ -27,21 +27,12 @@
             $telegram->sendMessage([ 'chat_id' => $chat_id, 'text' => $reply ]);
         }
         else {
-            $telegram->sendMessage([ 'chat_id' => $chat_id, 'text' => stringHandler($text)]);
+            $telegram->sendMessage([ 'chat_id' => $chat_id, 'text' => getSmallLink($text).' '.getLongUrl($text);]);
         }
     }
     else {
         $telegram->sendMessage([ 'chat_id' => $chat_id, 'text' => 'Отправьте текстовое сообщение.' ]);
     }
-	
-	function stringHandler($string) {
-		if(stristr($string, 'bit.ly') !== FALSE)) {
-			return getLongUrl($string);
-		}
-		else {
-			return getSmallLink($string);		
-		}
-	}
 
     function getSmallLink($longurl){
         $url = "http://api.bit.ly/shorten?version=2.0.1&longUrl=$longurl&login=o_4dkf0dhc6p&apiKey=R_a9dbe6c319fe4397946c86b8798b7abb&format=json&history=1";
