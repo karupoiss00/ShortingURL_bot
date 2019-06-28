@@ -63,7 +63,7 @@
 			)
 		);
 		$res = file_get_contents(sprintf('%s/%s?%s', END_POINT, 'expand', $query));
-		if (strlen($res) != 0 and $res != 'NOT_FOUND') {
+		if (strlen($res) != 0 or $res != 'NOT_FOUND') {
 			return "Ссылка расшифрована - ".$res;
 		}
 		else { 
