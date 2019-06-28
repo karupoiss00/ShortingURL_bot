@@ -27,7 +27,7 @@
             $telegram->sendMessage([ 'chat_id' => $chat_id, 'text' => $reply ]);
         }
         else {
-            $telegram->sendMessage([ 'chat_id' => $chat_id, 'text' => getSmallLink($text).' '.getLongUrl($text);]);
+            $telegram->sendMessage([ 'chat_id' => $chat_id, 'text' => getLongUrl($text)]);
         }
     }
     else {
