@@ -1,6 +1,5 @@
 <?php
 	include('vendor/autoload.php'); //Подключаем библиотеку
-	require_once ('vendor\thingengineer\mysqli-database-class\MysqliDb.php');
 	use Telegram\Bot\Api;
 	
 	const LOGIN =  'o_4dkf0dhc6p';
@@ -48,7 +47,7 @@
     }
 	else {
         $telegram->sendMessage([ 'chat_id' => $chat_id, 'text' => 'Отправьте текстовое сообщение.' ]);
-    }
+	}
 	
     function getShortUrl($longUrl):string {
         $url = "http://api.bit.ly/shorten?version=2.0.1&longUrl=$longUrl&login=o_4dkf0dhc6p&apiKey=R_a9dbe6c319fe4397946c86b8798b7abb&format=json&history=1";
