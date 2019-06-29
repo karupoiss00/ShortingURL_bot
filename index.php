@@ -1,5 +1,6 @@
 <?php
 	include('vendor/autoload.php'); //Подключаем библиотеку
+	require_once ('vendor\thingengineer\mysqli-database-class\MysqliDb.php');
 	use Telegram\Bot\Api;
 	
 	const LOGIN =  'o_4dkf0dhc6p';
@@ -90,24 +91,34 @@
 	function insertHistoryRecord($record) {
 		$db->where ('chat_id', $chat_id);
 		
-		$history = array
-		(
-			$db->getOne ("first_request"),
-			$db->getOne ("second_request"),
-			$db->getOne ("third_request"),
-			$db->getOne ("fouth_request"),
-			$db->getOne ("fifth_request")
-		);
-		array_shift($history);
-		$history[4] = $record;
+		if ($db->count == 0) {
+			$data = array 
+			(
+				"chat_id" => $chat_id,
+				"first_request" => 'Пусто',
+				"second_request" => 'Пусто',
+				"third_request" => 'Пусто',
+				"fouth_request" => 'Пусто',
+				"fifth_request" => $record
+			);
+			$db->insert('user_request_history', $data);	
+		}
+		else {
+			$users_history = $db->get('user_request_history');
+			$history = $db->getOne('user_request_history', array('first_request', 'second_request', 'third_request', 'fouth_request', 'fifth_request'));
+			array_shift($history);
+			$history[4] = $record;
+			
+			$data = array 
+			(
+				"chat_id" => $chat_id,
+				"first_request" => $history[0],
+				"second_request" => $history[1],
+				"third_request" => $history[2],
+				"fouth_request" => $history[3],
+				"fifth_request" => $history[4]
+			);
+			$db->update('users', $data);
+		}
 		
-		$data = array 
-		(
-			"first_request" => $history[0],
-			"second_request" => $history[1],
-			"third_request" => $history[2],
-			"fouth_request" => $history[3],
-			"fifth_request" => $history[4]
-		);
-		$db->insert ('users', $data);
 	}
