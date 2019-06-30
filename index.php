@@ -39,7 +39,7 @@
 				];
 				$reply = 'Последние действия:';
 				foreach ($history as $record) {
-					$reply .= '\n'.$record.'\n';
+					$reply .= '\r\n'.$record.'\r\n';
 				}
 				$telegram->sendMessage([ 'chat_id' => $chat_id, 'text' => $reply ]);
 			}
@@ -56,7 +56,7 @@
 				$reply = 'Последние действия:';
 				$history = array_slice($data , 1);
 				foreach ($history as $record) {
-					$reply .= '\n'.$record.'\n';
+					$reply .= '\r\n'.$record.'\r\n';
 				}
 				$telegram->sendMessage([ 'chat_id' => $chat_id, 'text' => $reply ]);
 			}
