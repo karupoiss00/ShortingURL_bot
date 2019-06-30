@@ -36,10 +36,10 @@
 					$res['third_request'],
 					$res['fourth_request'],
 					$res['fifth_request']
-				]
+				];
 				$reply = 'Последние действия:';
 				foreach ($history as $record) {
-					$reply .= '<br>'.$record.'<br>'
+					$reply .= '<br>'.$record.'<br>';
 				}
 				$telegram->sendMessage([ 'chat_id' => $chat_id, 'text' => $reply ]);
 			}
@@ -51,12 +51,12 @@
 					'third_request' => '<пусто>',
 					'fourth_request' => '<пусто>',
 					'fifth_request' => '<пусто>'
-				]
+				];
 				$db->insert('user_request_history', $data);
 				$reply = 'Последние действия:';
 				$history = array_slice($data , 1);
 				foreach ($history as $record) {
-					$reply .= '<br>'.$record.'<br>'
+					$reply .= '<br>'.$record.'<br>';
 				}
 				$telegram->sendMessage([ 'chat_id' => $chat_id, 'text' => $reply ]);
 			}
