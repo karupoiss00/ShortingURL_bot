@@ -27,14 +27,9 @@
 			$telegram->sendMessage([ 'chat_id' => $chat_id, 'text' => $reply ]);
 		}
 		elseif ($text == 'тест') {
-			$data1 = [
-				'chat_id' => 31244234,
-				'first_request' => 'Full',
-				'second_request' => 'Full',
-				'third_request' => 'Full',
-				'fouth_request' => 'Full',
-				'fifth_request' => 'Full'
-			];
+			$db->where('chat_id', 31244234);
+			$data1 = $db->getOne('user_request_history');
+			$data1['first_request'] = 'full';
 			$result = $db->insert('user_request_history', $data1);	
 			if ($result) {
 				
