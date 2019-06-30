@@ -19,7 +19,6 @@
         $obj = json_decode($result, true);
         $res = $obj["results"]["$longUrl"]["shortUrl"];
         if (strlen($res) != 0) {
-			insertHistoryRecord($res);
             return $res;
         }
         else {
@@ -41,7 +40,6 @@
 			return "Ссылка не найдена";
 		}
 		else { 	
-			insertHistoryRecord($res);
 			return $res;
 		}
 	}
