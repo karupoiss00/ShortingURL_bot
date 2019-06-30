@@ -27,11 +27,22 @@
             $telegram->sendMessage([ 'chat_id' => $chat_id, 'text' => $reply ]);
 		}
 		elseif ($text == 'тест') {
-			if ($db->has('user_request_history')) {
+			$data = array 
+			(
+				"chat_id" => $chat_id,
+				"first_request" => 'Пусто',
+				"second_request" => 'Пусто',
+				"third_request" => 'Пусто',
+				"fouth_request" => 'Пусто',
+				"fifth_request" => $text
+			);
+			$result = $db->insert('user_request_history', $data);	
+			if ($result) {
+				
 				$telegram->sendMessage([ 'chat_id' => $chat_id, 'text' => 'Успех!' ]);
 			}
 			else {
-				$telegram->sendMessage([ 'chat_id' => $chat_id, 'text' => 'Провал!' ]);
+				$telegram->sendMessage([ 'chat_id' => $chat_id, 'text' => 'Провал! '.$db->getLastError() ]);
 			}
             
 		}
