@@ -36,7 +36,7 @@
 				$telegram->sendMessage([ 'chat_id' => $chat_id, 'text' => 'Успех!' ]);
 			}
 			else {
-				$telegram->sendMessage([ 'chat_id' => $chat_id, 'text' => 'Провал! '.$db->getLastError().$data1.implode()  ]);
+				$telegram->sendMessage([ 'chat_id' => $chat_id, 'text' => 'Провал! '.$db->getLastError().implode($data1)  ]);
 			}
 		}
 		else {
