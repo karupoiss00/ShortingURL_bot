@@ -7,9 +7,10 @@
 	$result = $telegram->getWebhookUpdates();
 	$text = $result["message"]["text"];
 	$chat_id = $result["message"]["chat"]["id"];
-	$name = $result["message"]["from"]["username"];
+	$name = $result["message"]["from"]["first_name"];
 	$db = new MysqliDb (DB_HOST, DB_USER, DB_PASS, DB_NAME);
 	$db->autoReconnect = true;
+	
 	
 	if($text) {
 		if ($text == '/start') {
@@ -39,6 +40,4 @@
     }
 	else {
         $telegram->sendMessage([ 'chat_id' => $chat_id, 'text' => 'Отправьте текстовое сообщение.' ]);
-    }
-	
-    
+	}

@@ -1,5 +1,6 @@
 {
     "require": {
       "irazasyed/telegram-bot-sdk": "2.0",
-        "thingengineer/mysqli-database-class": "dev-master"   }
+        "thingengineer/mysqli-database-class": "dev-master",
+        "gabordemooij/redbean": "^5.3"   }
 }
