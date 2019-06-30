@@ -42,7 +42,7 @@
 			else {
 				$data = [
 					'chat_id' => $chat_id,
-					'first_request' => '<пусто>',
+					'first_request' => ' <пусто>',
 					'second_request' => '<пусто>',
 					'third_request' => '<пусто>',
 					'fourth_request' => '<пусто>',
