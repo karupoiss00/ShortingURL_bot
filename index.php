@@ -38,29 +38,24 @@
 				$text = 'http://'.$text;
 			}
 			if (strpos($text, 'bit.ly') === FALSE) {
-				
-				$db->where ("id", 1);
-				
-				if ($db->count == 0) {
-					$data = array 
-					(
-						"chat_id" => $chat_id,
-						"first_request" => 'Пусто',
-						"second_request" => 'Пусто',
-						"third_request" => 'Пусто',
-						"fouth_request" => 'Пусто',
-						"fifth_request" => $record
-					);
-					$db->insert('user_request_history', $data);	
+			
+				$data = array 
+				(
+					"chat_id" => $chat_id,
+					"first_request" => 'Пусто',
+					"second_request" => 'Пусто',
+					"third_request" => 'Пусто',
+					"fouth_request" => 'Пусто',
+					"fifth_request" => $record
+				);
+
+				$id = $db->insert ('user_request_history', $data);
+				if ($id) {
+					$telegram->sendMessage([ 'chat_id' => $chat_id, 'text' => getShortUrl($text).' Добавлен в БД '.$id]);
+				}
+				else {
 					$telegram->sendMessage([ 'chat_id' => $chat_id, 'text' => getShortUrl($text)]);
 				}
-				else
-				{
-					$user = $db->getOne ('user_request_history');
-					$telegram->sendMessage([ 'chat_id' => $chat_id, 'text' => getShortUrl($text).' '.user['fifth_request']]);
-				}
-				
-				//echo $user['id'];
 			}
 			else {
 				$telegram->sendMessage([ 'chat_id' => $chat_id, 'text' => getLongUrl($text)]);
