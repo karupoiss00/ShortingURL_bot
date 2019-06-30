@@ -27,21 +27,38 @@
 			$telegram->sendMessage([ 'chat_id' => $chat_id, 'text' => $reply ]);
 		}
 		elseif ($text == 'тест') {
-			$data = [
-				'chat_id' => $chat_id,
-				'first_request' => 'Empty',
-				'second_request' => 'Empty',
-				'third_request' => 'Empty',
-				'fourth_request' => 'Empty',
-				'fifth_request' => 'Empty'
-			];
-			$result = $db->insert('user_request_history', $data);	
-			if ($result) {
-				
-				$telegram->sendMessage([ 'chat_id' => $chat_id, 'text' => 'Успех!' ]);
+			$db->where('chat_id', $chat_id);
+			$res = $db->getOne('user_request_history');
+			if (count($res)) {
+				$history = [
+					$res['first_request'],
+					$res['second_request'],
+					$res['third_request'],
+					$res['fourth_request'],
+					$res['fifth_request']
+				]
+				$reply = 'Последние действия:';
+				foreach ($history as $record) {
+					$reply .= '<br>'.$record.'<br>'
+				}
+				$telegram->sendMessage([ 'chat_id' => $chat_id, 'text' => $reply ]);
 			}
 			else {
-				$telegram->sendMessage([ 'chat_id' => $chat_id, 'text' => 'Провал! '.$db->getLastError() ]);
+				$data = [
+					'chat_id' => $chat_id,
+					'first_request' => '<пусто>',
+					'second_request' => '<пусто>',
+					'third_request' => '<пусто>',
+					'fourth_request' => '<пусто>',
+					'fifth_request' => '<пусто>'
+				]
+				$db->insert('user_request_history', $data);
+				$reply = 'Последние действия:';
+				$history = array_slice($data , 1);
+				foreach ($history as $record) {
+					$reply .= '<br>'.$record.'<br>'
+				}
+				$telegram->sendMessage([ 'chat_id' => $chat_id, 'text' => $reply ]);
 			}
 		}
 		else {
