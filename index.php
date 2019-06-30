@@ -78,7 +78,7 @@
 				$record['second_request'] = $record['third_request'];
 				$record['third_request'] = $record['fourth_request'];
 				$record['fourth_request'] = $record['fifth_request'];
-				$record['fifth_request'] = $res;
+				$record['fifth_request'] = $reply;
 				$db->update('user_request_history', $record);
 			}
 			else {
@@ -88,7 +88,7 @@
 					'second_request' => '<пусто>',
 					'third_request' => '<пусто>',
 					'fourth_request' => '<пусто>',
-					'fifth_request' => $res
+					'fifth_request' => $reply
 				];
 				$db->insert('user_request_history', $data);
 			}
