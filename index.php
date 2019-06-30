@@ -29,7 +29,7 @@
 		elseif ($text == 'тест') {
 			$db->where('chat_id', 31244234);
 			$res = $db->getOne('user_request_history');
-			$telegram->sendMessage([ 'chat_id' => $chat_id, 'text' => 'Успех!' ]);
+			$telegram->sendMessage([ 'chat_id' => $chat_id, 'text' => $res['first_request'] ]);
 		}
 		else {
 			if (strpos($text, 'http') === FALSE) {
