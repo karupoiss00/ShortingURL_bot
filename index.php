@@ -71,28 +71,26 @@
 				$reply = getLongUrl($text);	
 			}
 			$telegram->sendMessage([ 'chat_id' => $chat_id, 'text' => $reply]);
-			if ($reply != 'Ссылка не корректна') {
-				$db->where('chat_id', $chat_id);
-				if (count($record)) {
-					$record = $db->getOne('user_request_history');
-					$record['first_request'] = $record['second_request'];
-					$record['second_request'] = $record['third_request'];
-					$record['third_request'] = $record['fourth_request'];
-					$record['fourth_request'] = $record['fifth_request'];
-					$record['fifth_request'] = $res;
-					$db->update('user_request_history', $record);
-				}
-				else {
-					$data = [
-						'chat_id' => $chat_id,
-						'first_request' => ' <пусто>',
-						'second_request' => '<пусто>',
-						'third_request' => '<пусто>',
-						'fourth_request' => '<пусто>',
-						'fifth_request' => $res
-					];
-					$db->insert('user_request_history', $data);
-				}
+			$db->where('chat_id', $chat_id);
+			if (count($record)) {
+				$record = $db->getOne('user_request_history');
+				$record['first_request'] = $record['second_request'];
+				$record['second_request'] = $record['third_request'];
+				$record['third_request'] = $record['fourth_request'];
+				$record['fourth_request'] = $record['fifth_request'];
+				$record['fifth_request'] = $res;
+				$db->update('user_request_history', $record);
+			}
+			else {
+				$data = [
+					'chat_id' => $chat_id,
+					'first_request' => ' <пусто>',
+					'second_request' => '<пусто>',
+					'third_request' => '<пусто>',
+					'fourth_request' => '<пусто>',
+					'fifth_request' => $res
+				];
+				$db->insert('user_request_history', $data);
 			}
 		}
 	}
