@@ -28,12 +28,12 @@
 		}
 		elseif ($text == 'тест') {
 			$data = [
-				"chat_id" => $chat_id,
-				"first_request" => 'Empty',
-				"second_request" => 'Empty',
-				"third_request" => 'Empty',
-				"fouth_request" => 'Empty',
-				"fifth_request" => 'Empty'
+				'chat_id' => $chat_id,
+				'first_request' => 'Empty',
+				'second_request' => 'Empty',
+				'third_request' => 'Empty',
+				'fouth_request' => 'Empty',
+				'fifth_request' => 'Empty'
 			];
 			$result = $db->insert('user_request_history', $data);	
 			if ($result) {
