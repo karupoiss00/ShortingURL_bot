@@ -30,13 +30,7 @@
 			$db->where('chat_id', $chat_id);
 			$res = $db->getOne('user_request_history');
 			if (count($res)) {
-				$history = [
-					$res['first_request'],
-					$res['second_request'],
-					$res['third_request'],
-					$res['fourth_request'],
-					$res['fifth_request']
-				];
+				$history = array_slice($res , 1);
 				$reply = 'Последние действия:
 				';
 				foreach ($history as $record) {
