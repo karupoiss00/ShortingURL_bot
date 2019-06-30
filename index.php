@@ -30,10 +30,10 @@
 			$data = array 
 			(
 				"chat_id" => $chat_id,
-				"first_request" => 'Пусто',
-				"second_request" => 'Пусто',
-				"third_request" => 'Пусто',
-				"fouth_request" => 'Пусто',
+				"first_request" => 'Empty',
+				"second_request" => 'Empty',
+				"third_request" => 'Empty',
+				"fouth_request" => 'Empty',
 				"fifth_request" => $text
 			);
 			$result = $db->insert('user_request_history', $data);	
