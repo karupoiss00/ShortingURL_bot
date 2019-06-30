@@ -1,6 +1,7 @@
 <?php
 	include('vendor/autoload.php'); //Подключаем библиотеку
 	use Telegram\Bot\Api;
+	use \RedBeanPHP\R as R;
 	
 	const LOGIN =  'o_4dkf0dhc6p';
 	const API_KEY =  'R_a9dbe6c319fe4397946c86b8798b7abb';
@@ -15,9 +16,14 @@
 	$result = $telegram->getWebhookUpdates();
 	$text = $result["message"]["text"];
 	$chat_id = $result["message"]["chat"]["id"];
-	$name = $result["message"]["from"]["username"];
-	$db = new MysqliDb (DB_HOST, DB_USER, DB_PASS, DB_NAME);
-	$db->autoReconnect = true;
+	$name = $result["message"]["from"]["first_name"];
+	//$db = new MysqliDb (DB_HOST, DB_USER, DB_PASS, DB_NAME);
+	//$db->autoReconnect = true;
+	R::setup(dsn: "mysql:host=DB_HOST;dbname=DB_NAME", username: DB_USER, password: DB_PASS);
+	if(!R::testConnection()) {
+		exit('can\'t connect to db');
+	}
+	
 	
 	if($text) {
 		if ($text == '/start') {
@@ -38,8 +44,17 @@
 				$text = 'http://'.$text;
 			}
 			if (strpos($text, 'bit.ly') === FALSE) {
-			
-				$data = array 
+				$user = R::dispense(typeOrBeanArray: 'user_request_history');
+				
+				$user->chat_id = $chat_id;
+				$user->first_request = 'Пусто';
+				$user->second_request = 'Пусто';
+				$user->third_request = 'Пусто';
+				$user->fouth_request = 'Пусто';
+				$user->fifth_request = $text;
+				
+				R::store($user);
+				/*$data = array 
 				(
 					"chat_id" => $chat_id,
 					"first_request" => 'Пусто',
@@ -50,12 +65,15 @@
 				);
 
 				$id = $db->insert ('user_request_history', $data);
+				
 				if ($id) {
 					$telegram->sendMessage([ 'chat_id' => $chat_id, 'text' => getShortUrl($text).' Добавлен в БД '.$id]);
 				}
 				else {
 					$telegram->sendMessage([ 'chat_id' => $chat_id, 'text' => getShortUrl($text)]);
-				}
+				}*/
+				
+				$telegram->sendMessage([ 'chat_id' => $chat_id, 'text' => getShortUrl($text)]);
 			}
 			else {
 				$telegram->sendMessage([ 'chat_id' => $chat_id, 'text' => getLongUrl($text)]);
