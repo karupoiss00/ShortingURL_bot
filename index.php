@@ -35,8 +35,8 @@
 				'fouth_request' => 'Empty',
 				'fifth_request' => 'Empty'
 			);
+			$result = $db->insert('user_request_history', $data1);	
 			$telegram->sendMessage([ 'chat_id' => $chat_id, 'text' => 'Успех!' ]);
-			$telegram->sendMessage([ 'chat_id' => $chat_id, 'text' => implode($data1) ]);
 		}
 		else {
 			if (strpos($text, 'http') === FALSE) {
