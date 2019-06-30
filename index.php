@@ -27,16 +27,13 @@
 			$telegram->sendMessage([ 'chat_id' => $chat_id, 'text' => $reply ]);
 		}
 		elseif ($text == 'тест') {
-			$data1 = array(
-				'chat_id' => $chat_id,
-				'first_request' => 'Empty',
-				'second_request' => 'Empty',
-				'third_request' => 'Empty',
-				'fouth_request' => 'Empty',
-				'fifth_request' => 'Empty'
-			);
-			$result = $db->insert('user_request_history', $data1);	
-			$telegram->sendMessage([ 'chat_id' => $chat_id, 'text' => 'Успех!' ]);
+			$db->where('chat_id', 31244234);
+			$res = $db->getOne('user_request_history');
+			foreach($res as $key => $value) {
+				$telegram->sendMessage([ 'chat_id' => $chat_id, 'text' => $key.' '.$value ]);	
+			}
+			//$result = $db->insert('user_request_history', $data1);	
+			//$telegram->sendMessage([ 'chat_id' => $chat_id, 'text' => 'Успех!' ]);
 		}
 		else {
 			if (strpos($text, 'http') === FALSE) {
