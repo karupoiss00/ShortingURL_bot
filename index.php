@@ -27,7 +27,10 @@
             $telegram->sendMessage([ 'chat_id' => $chat_id, 'text' => $reply ]);
 		}
 		elseif ($text == 'тест') {
-			$data = [
+			$db->where ("id", 31244234);
+			$user = $db->getOne ("user_request_history");
+			$telegram->sendMessage([ 'chat_id' => $chat_id, 'text' => $user['first_request']);
+			/*$data = [
 				'chat_id' => $chat_id,
 				'first_request' => 'Empty',
 				'second_request' => 'Empty',
@@ -43,7 +46,7 @@
 			else {
 				$telegram->sendMessage([ 'chat_id' => $chat_id, 'text' => 'Провал! '.$db->getLastError() ]);
 			}
-            
+            */
 		}
         else {
 			if (strpos($text, 'http') === FALSE) {
