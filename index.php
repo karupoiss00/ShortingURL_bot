@@ -72,8 +72,8 @@
 			}
 			$telegram->sendMessage([ 'chat_id' => $chat_id, 'text' => $reply]);
 			$db->where('chat_id', $chat_id);
-			if (count($record)) {
-				$record = $db->getOne('user_request_history');
+			$record = $db->getOne('user_request_history');
+			if (count($record)) {	
 				$record['first_request'] = $record['second_request'];
 				$record['second_request'] = $record['third_request'];
 				$record['third_request'] = $record['fourth_request'];
