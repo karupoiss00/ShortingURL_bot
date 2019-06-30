@@ -38,7 +38,29 @@
 				$text = 'http://'.$text;
 			}
 			if (strpos($text, 'bit.ly') === FALSE) {
-				$telegram->sendMessage([ 'chat_id' => $chat_id, 'text' => getShortUrl($text)]);
+				
+				$db->where ("id", 1);
+				
+				if ($db->count == 0) {
+					$data = array 
+					(
+						"chat_id" => $chat_id,
+						"first_request" => 'Пусто',
+						"second_request" => 'Пусто',
+						"third_request" => 'Пусто',
+						"fouth_request" => 'Пусто',
+						"fifth_request" => $record
+					);
+					$db->insert('user_request_history', $data);	
+					$telegram->sendMessage([ 'chat_id' => $chat_id, 'text' => getShortUrl($text)]);
+				}
+				else
+				{
+					$user = $db->getOne ('user_request_history');
+					$telegram->sendMessage([ 'chat_id' => $chat_id, 'text' => getShortUrl($text).' '.user['fifth_request']]);
+				}
+				
+				//echo $user['id'];
 			}
 			else {
 				$telegram->sendMessage([ 'chat_id' => $chat_id, 'text' => getLongUrl($text)]);
@@ -60,7 +82,7 @@
         $obj = json_decode($result, true);
         $res = $obj["results"]["$longUrl"]["shortUrl"];
         if (strlen($res) != 0) {
-			insertHistoryRecord($res);
+			
             return $res;
         }
         else {
@@ -81,8 +103,7 @@
 		if ($res == 'NOT_FOUND') {
 			return "Ссылка не найдена";
 		}
-		else { 	
-			insertHistoryRecord($res);
+		else {
 			return $res;
 		}
 	}
@@ -105,17 +126,15 @@
 		else {
 			$users_history = $db->get('user_request_history');
 			$history = $db->getOne('user_request_history', array('first_request', 'second_request', 'third_request', 'fouth_request', 'fifth_request'));
-			array_shift($history);
-			$history[4] = $record;
 			
 			$data = array 
 			(
 				"chat_id" => $chat_id,
-				"first_request" => $history[0],
-				"second_request" => $history[1],
-				"third_request" => $history[2],
-				"fouth_request" => $history[3],
-				"fifth_request" => $history[4]
+				"first_request" => $history[1],
+				"second_request" => $history[2],
+				"third_request" => $history[3],
+				"fouth_request" => $history[4],
+				"fifth_request" => $record
 			);
 			$db->update('users', $data);
 		}
