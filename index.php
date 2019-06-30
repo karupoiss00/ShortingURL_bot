@@ -37,9 +37,11 @@
 					$res['fourth_request'],
 					$res['fifth_request']
 				];
-				$reply = 'Последние действия:';
+				$reply = 'Последние действия:
+				';
 				foreach ($history as $record) {
-					$reply .= '\r\n'.$record.'\r\n';
+					$reply .= $record.'
+					';
 				}
 				$telegram->sendMessage([ 'chat_id' => $chat_id, 'text' => $reply ]);
 			}
@@ -53,10 +55,12 @@
 					'fifth_request' => '<пусто>'
 				];
 				$db->insert('user_request_history', $data);
-				$reply = 'Последние действия:';
+				$reply = 'Последние действия:
+				';
 				$history = array_slice($data , 1);
 				foreach ($history as $record) {
-					$reply .= '\r\n'.$record.'\r\n';
+					$reply .= $record.'
+					';
 				}
 				$telegram->sendMessage([ 'chat_id' => $chat_id, 'text' => $reply ]);
 			}
