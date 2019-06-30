@@ -46,7 +46,7 @@
 					"second_request" => 'Пусто',
 					"third_request" => 'Пусто',
 					"fouth_request" => 'Пусто',
-					"fifth_request" => $record
+					"fifth_request" => getShortUrl($text)
 				);
 
 				$id = $db->insert ('user_request_history', $data);
