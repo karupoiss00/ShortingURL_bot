@@ -23,29 +23,15 @@
 			$telegram->sendMessage([ 'chat_id' => $chat_id, 'text' => $reply]);
 		}
 		elseif ($text == '/help') {
-            $reply = HELP_REPLY;
-            $telegram->sendMessage([ 'chat_id' => $chat_id, 'text' => $reply ]);
+			$reply = HELP_REPLY;
+			$telegram->sendMessage([ 'chat_id' => $chat_id, 'text' => $reply ]);
 		}
 		elseif ($text == 'тест') {
-			$data = [
-				'chat_id' => $chat_id,
-				'first_request' => 'Empty',
-				'second_request' => 'Empty',
-				'third_request' => 'Empty',
-				'fouth_request' => 'Empty',
-				'fifth_request' => 'Empty'
-			];
-			$result = $db->insert('user_request_history', $data);	
-			if ($result) {
-				
-				$telegram->sendMessage([ 'chat_id' => $chat_id, 'text' => 'Успех!' ]);
-			}
-			else {
-				$telegram->sendMessage([ 'chat_id' => $chat_id, 'text' => 'Провал! '.$db->getLastError() ]);
-			}
-            
+			$db->where('chat_id', 31244234);
+			$res = $db->getOne('user_request_history');
+			$telegram->sendMessage([ 'chat_id' => $chat_id, 'text' => 'Успех!' ]);
 		}
-        else {
+		else {
 			if (strpos($text, 'http') === FALSE) {
 				$text = 'http://'.$text;
 			}
@@ -55,8 +41,8 @@
 			else {
 				$telegram->sendMessage([ 'chat_id' => $chat_id, 'text' => getLongUrl($text)]);
 			}
-        }
-    }
+		}
+	}
 	else {
-        $telegram->sendMessage([ 'chat_id' => $chat_id, 'text' => 'Отправьте текстовое сообщение.' ]);
+		$telegram->sendMessage([ 'chat_id' => $chat_id, 'text' => 'Отправьте текстовое сообщение.' ]);
 	}
