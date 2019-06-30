@@ -26,7 +26,7 @@
 			$reply = HELP_REPLY;
 			$telegram->sendMessage([ 'chat_id' => $chat_id, 'text' => $reply ]);
 		}
-		elseif ($text == 'тест') {
+		elseif ($text == '/history') {
 			$db->where('chat_id', $chat_id);
 			$res = $db->getOne('user_request_history');
 			if (count($res)) {
