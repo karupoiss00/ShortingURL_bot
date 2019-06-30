@@ -33,7 +33,7 @@
 				"second_request" => 'Empty',
 				"third_request" => 'Empty',
 				"fouth_request" => 'Empty',
-				"fifth_request" => $text
+				"fifth_request" => 'Empty'
 			];
 			$result = $db->insert('user_request_history', $data);	
 			if ($result) {
