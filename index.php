@@ -26,6 +26,15 @@
             $reply = HELP_REPLY;
             $telegram->sendMessage([ 'chat_id' => $chat_id, 'text' => $reply ]);
 		}
+		elseif ($text == 'тест') {
+			if ($db->has('user_request_history')) {
+				$telegram->sendMessage([ 'chat_id' => $chat_id, 'text' => 'Успех!' ]);
+			}
+			else {
+				$telegram->sendMessage([ 'chat_id' => $chat_id, 'text' => 'Провал!' ]);
+			}
+            
+		}
         else {
 			if (strpos($text, 'http') === FALSE) {
 				$text = 'http://'.$text;
