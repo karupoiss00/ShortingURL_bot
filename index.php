@@ -1,76 +1,40 @@
 <?php
     include('vendor/autoload.php'); //Подключаем библиотеку
-    use Telegram\Bot\Api;
-	
-	define('LOGIN', 'o_4dkf0dhc6p');
-	define('API_KEY', 'R_a9dbe6c319fe4397946c86b8798b7abb');
-	define('END_POINT', 'http://api.bit.ly/v3');
-	
-    $telegram = new Api('885752742:AAF63rND57OidzVAJ3ReDp7qGkX7oVaunBY');
-    $result = $telegram->getWebhookUpdates();
-    $text = $result["message"]["text"];
-    $chat_id = $result["message"]["chat"]["id"];
-    $name = $result["message"]["from"]["username"];
+    use Telegram\Bot\Api; 
+
+    $telegram = new Api('885752742:AAF63rND57OidzVAJ3ReDp7qGkX7oVaunBY'); //Устанавливаем токен, полученный у BotFather
+    $result = $telegram -> getWebhookUpdates(); //Передаем в переменную $result полную информацию о сообщении пользователя
+    
+    $text = $result["message"]["text"]; //Текст сообщения
+    $chat_id = $result["message"]["chat"]["id"]; //Уникальный идентификатор пользователя
+    $name = $result["message"]["from"]["username"]; //Юзернейм пользователя
+    $keyboard = [["Последние статьи"],["Картинка"],["Гифка"]]; //Клавиатура
+
     if($text){
-        if ($text == '/start') {
-            if (strlen($name) == 0) {
-                $reply = 'Добро пожаловать, Незнакомец!';
-            }
-            else {
-                $reply = 'Добро пожаловать, '.$name.'!';
-            }
-            $telegram->sendMessage([ 'chat_id' => $chat_id, 'text' => $reply]);
-        }
-        elseif ($text == '/help') {
-            $reply = 'Данный бот предназначен для работы со ссылками. Он умеет сокращать или расшифровывать уже сокращённые ссылки. Для того, чтобы воспользоваться ботом, отправьте ему ссылку, которую необходимо сократить.';
+         if ($text == "/start") {
+            $reply = "Добро пожаловать в бота!";
+            $reply_markup = $telegram->replyKeyboardMarkup([ 'keyboard' => $keyboard, 'resize_keyboard' => true, 'one_time_keyboard' => false ]);
+            $telegram->sendMessage([ 'chat_id' => $chat_id, 'text' => $reply, 'reply_markup' => $reply_markup ]);
+        }elseif ($text == "/help") {
+            $reply = "Информация с помощью.";
             $telegram->sendMessage([ 'chat_id' => $chat_id, 'text' => $reply ]);
+        }elseif ($text == "Картинка") {
+            $url = "https://68.media.tumblr.com/6d830b4f2c455f9cb6cd4ebe5011d2b8/tumblr_oj49kevkUz1v4bb1no1_500.jpg";
+            $telegram->sendPhoto([ 'chat_id' => $chat_id, 'photo' => $url, 'caption' => "Описание." ]);
+        }elseif ($text == "Гифка") {
+            $url = "https://68.media.tumblr.com/bd08f2aa85a6eb8b7a9f4b07c0807d71/tumblr_ofrc94sG1e1sjmm5ao1_400.gif";
+            $telegram->sendDocument([ 'chat_id' => $chat_id, 'document' => $url, 'caption' => "Описание." ]);
+        }elseif ($text == "Последние статьи") {
+            $html=simplexml_load_file('http://netology.ru/blog/rss.xml');
+            foreach ($html->channel->item as $item) {
+	     $reply .= "\xE2\x9E\xA1 ".$item->title." (<a href='".$item->link."'>читать</a>)\n";
+        	}
+            $telegram->sendMessage([ 'chat_id' => $chat_id, 'parse_mode' => 'HTML', 'disable_web_page_preview' => true, 'text' => $reply ]);
+        }else{
+        	$reply = "По запросу \"<b>".$text."</b>\" ничего не найдено.";
+        	$telegram->sendMessage([ 'chat_id' => $chat_id, 'parse_mode'=> 'HTML', 'text' => $reply ]);
         }
-        else {
-            if (strpos($text, 'bit.ly') === FALSE) {
-				$telegram->sendMessage([ 'chat_id' => $chat_id, 'text' => getShortUrl($text)]);
-			}
-            else {
-				$telegram->sendMessage([ 'chat_id' => $chat_id, 'text' => getLongUrl($text)]);
-			}
-        }
+    }else{
+    	$telegram->sendMessage([ 'chat_id' => $chat_id, 'text' => "Отправьте текстовое сообщение." ]);
     }
-    else {
-        $telegram->sendMessage([ 'chat_id' => $chat_id, 'text' => 'Отправьте текстовое сообщение.' ]);
-    }
-    function getSmallLink($longurl){
-        $url = "http://api.bit.ly/shorten?version=2.0.1&longUrl=$longurl&login=o_4dkf0dhc6p&apiKey=R_a9dbe6c319fe4397946c86b8798b7abb&format=json&history=1";
-        $s = curl_init();
-        curl_setopt($s,CURLOPT_URL, $url);
-        curl_setopt($s,CURLOPT_HEADER,false);
-        curl_setopt($s,CURLOPT_RETURNTRANSFER,1);
-        $result = curl_exec($s);
-        curl_close( $s );
-        $obj = json_decode($result, true);
-        $res = $obj["results"]["$longurl"]["shortUrl"];
-        if (strlen($res) != 0) {
-            return 'Ссылка сокращена - '.$res;
-        }
-        else {
-            return 'Ссылка некорректна';
-        }
-    }
-	
-	function getLongUrl($shortUrl)
-	{
-		$query = http_build_query(
-			array(
-				'login' => 'o_4dkf0dhc6p',
-				'apiKey' => 'R_a9dbe6c319fe4397946c86b8798b7abb',
-				'shortUrl' => $shortUrl,
-				'format' => 'txt'
-			)
-		);
-		$res = file_get_contents(sprintf('%s/%s?%s', END_POINT, 'expand', $query));
-		if ($res == 'NOT_FOUND') {
-			return "Ссылка не найдена";
-		}
-		else { 	
-			return "Ссылка расшифрована - ".$res;
-		}
-	}
 ?>
