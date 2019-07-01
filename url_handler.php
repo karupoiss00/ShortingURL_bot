@@ -37,7 +37,7 @@
 		);
 		$res = file_get_contents(sprintf('%s/%s?%s', END_POINT, 'expand', $query));
 		if ($res == 'NOT_FOUND' or $res == 'bit.ly') {
-			return "Ссылка корректна";
+			return "Ссылка некорректна";
 		}
 		else { 	
 			return $res;

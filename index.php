@@ -1,5 +1,5 @@
 <?php
-	include('vendor/autoload.php'); //Подключаем библиотеку
+	include('vendor/autoload.php');
 	include('url_handler.php');
 	use Telegram\Bot\Api;
 	
@@ -42,7 +42,7 @@
 			else {
 				$data = [
 					'chat_id' => $chat_id,
-					'first_request' => ' <пусто>',
+					'first_request' => '<пусто>',
 					'second_request' => '<пусто>',
 					'third_request' => '<пусто>',
 					'fourth_request' => '<пусто>',
@@ -71,7 +71,7 @@
 				$reply = getLongUrl($text);	
 			}
 			$telegram->sendMessage([ 'chat_id' => $chat_id, 'text' => $reply]);
-			if ($reply !== 'Ссылка некорректна') {
+			if ($reply != 'Ссылка некорректна') {
 				$db->where('chat_id', $chat_id);
 				$record = $db->getOne('user_request_history');
 				if (count($record)) {
