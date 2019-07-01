@@ -71,7 +71,7 @@
 				$reply = getLongUrl($text);	
 			}
 			$telegram->sendMessage([ 'chat_id' => $chat_id, 'text' => $reply]);
-			if ($reply !== 'Ссылка не корректна') {
+			if ($reply !== 'Ссылка некорректна') {
 				$db->where('chat_id', $chat_id);
 				$record = $db->getOne('user_request_history');
 				if (count($record)) {
