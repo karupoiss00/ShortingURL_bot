@@ -32,7 +32,7 @@
 			if (count($res)) {
 				$history = array_slice($res , 1);
 				$reply = 'Последние действия:
-				';
+				 ';
 				foreach ($history as $record) {
 					$reply .= $record.'
 					';
@@ -50,7 +50,7 @@
 				];
 				$db->insert('user_request_history', $data);
 				$reply = 'Последние действия:
-				';
+				 ';
 				$history = array_slice($data , 1);
 				foreach ($history as $record) {
 					$reply .= $record.'
@@ -85,7 +85,7 @@
 				else {
 					$data = [
 						'chat_id' => $chat_id,
-						'first_request' => ' <пусто>',
+						'first_request' => '<пусто>',
 						'second_request' => '<пусто>',
 						'third_request' => '<пусто>',
 						'fourth_request' => '<пусто>',
