@@ -63,7 +63,7 @@
 	function formatRowToStr($data): string {
 		$data = array_slice($data , 1);
 		$res = "Последние действия:\n";
-		foreach ($res as $record) {
+		foreach ($data as $record) {
 			$res .= $record."\n";
 		}
 		return $res;
