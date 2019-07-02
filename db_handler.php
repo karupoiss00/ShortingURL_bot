@@ -37,7 +37,7 @@
 				FOURTH_REQUEST => '<пусто>',
 				FIFTH_REQUEST => $lastAction
 			];
-			$db->insert('user_request_history', $data);
+			insertUserRow($db, $data);
 		}
 	}
 	
@@ -45,4 +45,8 @@
 		$db->where(CHAT_ID, $userId);
 		$row = $db->getOne('user_request_history');
 		return $row;
+	}
+	
+	function insertUserRow(MysqliDb $db, $row): array {
+		$db->insert('user_request_history', $row);
 	}
