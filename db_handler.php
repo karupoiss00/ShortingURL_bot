@@ -19,14 +19,14 @@
 	}
 
 	function updateHistory(MysqliDb $db, $lastAction, $userId) {
-		$record = getUserRow($db, $userId);
+		$record = getRow($db, $userId);
 		if (count($record)) {
 			$record[FIRST_REQUEST] = $record[SECOND_REQUEST];
 			$record[SECOND_REQUEST] = $record[THIRD_REQUEST];
 			$record[THIRD_REQUEST] = $record[FOURTH_REQUEST];
 			$record[FOURTH_REQUEST] = $record[FIFTH_REQUEST];
 			$record[FIFTH_REQUEST] = $lastAction;
-			updateUserRow($db, $record);
+			updateRow($db, $record);
 		}
 		else {
 			$data = [
@@ -37,16 +37,48 @@
 				FOURTH_REQUEST => '<пусто>',
 				FIFTH_REQUEST => $lastAction
 			];
-			insertUserRow($db, $data);
+			insertRow($db, $data);
 		}
 	}
 	
-	function getUserRow(MysqliDb $db, $userId): array {
+	function getUserHistory(MysqliDb $db, $userId): string {
+		$row = getRow($db, $userId);
+		if (count($row)) {
+			return formatRowToStr($row);
+		}
+		else {
+			$data = [
+				CHAT_ID => $chat_id,
+				FIRST_REQUEST => '<пусто>',
+				SECOND_REQUEST => '<пусто>',
+				THIRD_REQUEST => '<пусто>',
+				FOURTH_REQUEST => '<пусто>',
+				FIFTH_REQUEST => '<пусто>'
+			];
+			insertRow($db, $data);
+			return formatRowToStr($data);
+		}
+	}
+	
+	function formatRowToStr($data): string {
+		$data = array_slice($data , 1);
+		$res = "Последние действия:\n";
+		foreach ($history as $record) {
+			$res .= $record."\n";
+		}
+		return $res;
+	}
+	
+	function getRow(MysqliDb $db, $userId): array {
 		$db->where(CHAT_ID, $userId);
 		$row = $db->getOne('user_request_history');
 		return $row;
 	}
 	
-	function updateUserRow(MysqliDb $db, $row): array {
+	function insertRow(MysqliDb $db, $row) {
+		$db->insert('user_request_history', $row);
+	}
+	
+	function updateRow(MysqliDb $db, $row) {
 		$db->update('user_request_history', $row);
 	}

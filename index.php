@@ -26,33 +26,8 @@
 			$telegram->sendMessage([ 'chat_id' => $chat_id, 'text' => $reply ]);
 		}
 		elseif ($text == '/history') {
-			$db->where('chat_id', $chat_id);
-			$row = $db->getOne('user_request_history');
-			if (count($row)) {
-				$history = array_slice($row , 1);
-				$reply = "Последние действия:\n ";
-				foreach ($history as $record) {
-					$reply .= $record."\n";
-				}
-				$telegram->sendMessage([ 'chat_id' => $chat_id, 'text' => $reply ]);
-			}
-			else {
-				$data = [
-					CHAT_ID => $chat_id,
-					FIRST_REQUEST => '<пусто>',
-					SECOND_REQUEST => '<пусто>',
-					THIRD_REQUEST => '<пусто>',
-					FOURTH_REQUEST => '<пусто>',
-					FIFTH_REQUEST => '<пусто>'
-				];
-				$db->insert('user_request_history', $data);
-				$reply = "Последние действия:\n";
-				$history = array_slice($data , 1);
-				foreach ($history as $record) {
-					$reply .= $record."\n";
-				}
-				$telegram->sendMessage([ 'chat_id' => $chat_id, 'text' => $reply ]);
-			}
+			$reply = getUserHistory($db, $chat_id);
+			$telegram->sendMessage([ 'chat_id' => $chat_id, 'text' => $reply ]);
 		}
 		else {
 			if (strpos($text, 'http') === FALSE) {
@@ -65,6 +40,7 @@
 			else {
 				$reply = getLongUrl($text);
 			}
+			
 			$telegram->sendMessage([ 'chat_id' => $chat_id, 'text' => $reply]);
 
 			if ($reply != 'Ссылка некорректна') {
