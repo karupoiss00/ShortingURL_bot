@@ -9,8 +9,9 @@
 	$text = $result["message"]["text"];
 	$chat_id = $result["message"]["chat"]["id"];
 	$name = $result["message"]["from"]["first_name"];
-	
+
 	use Telegram\Bot\Api;
+	
 	
 	if($text) {
 		if ($text == '/start') {
