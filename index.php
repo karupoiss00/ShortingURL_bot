@@ -26,7 +26,7 @@
 			$telegram->sendMessage([ 'chat_id' => $chat_id, 'text' => $reply ]);
 		}
 		elseif ($text == '/history') {
-			$db->where('chat_id', $userId);
+			$db->where('chat_id', $chat_id);
 			$row = $db->getOne('user_request_history');
 			if (count($row)) {
 				$history = array_slice($row , 1);
@@ -68,7 +68,7 @@
 			$telegram->sendMessage([ 'chat_id' => $chat_id, 'text' => $reply]);
 
 			if ($reply != 'Ссылка некорректна') {
-				$db->where('chat_id', $userId);
+				$db->where('chat_id', $chat_id);
 				$record = $db->getOne('user_request_history');
 				if (count($record)) {
 					$record[FIRST_REQUEST] = $record[SECOND_REQUEST];
