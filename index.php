@@ -2,6 +2,7 @@
 	require_once('vendor/autoload.php');
 	require_once('url_handler.php');
 	require_once('db_handler.php');
+	
 	use Telegram\Bot\Api;
 
 	$telegram = new Api('885752742:AAF63rND57OidzVAJ3ReDp7qGkX7oVaunBY');
@@ -13,11 +14,11 @@
 
 	if($text) {
 		if ($text == '/start') {
-			if (strlen($name) == 0) {
-				$reply = 'Добро пожаловать, Незнакомец!';
+			if (strlen($name)) {
+				$reply = 'Добро пожаловать, '.$name.'!';		
 			}
 			else {
-				$reply = 'Добро пожаловать, '.$name.'!';
+				$reply = 'Добро пожаловать, Незнакомец!';
 			}
 			$telegram->sendMessage([ 'chat_id' => $chat_id, 'text' => $reply]);
 		}
@@ -43,7 +44,7 @@
 			
 			$telegram->sendMessage([ 'chat_id' => $chat_id, 'text' => $reply]);
 
-			if ($reply != 'Ссылка некорректна') {
+			if ($reply != ERROR_MESS) {
 
 				updateHistory($db, $reply, $chat_id);
 			}
