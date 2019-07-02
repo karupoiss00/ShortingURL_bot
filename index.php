@@ -1,16 +1,16 @@
 <?php
-	include('vendor/autoload.php');
-	include('url_handler.php');
-	include('db_handler.php');
+	require_once('vendor/autoload.php');
+	require_once('url_handler.php');
+	require_once('db_handler.php');
 	use Telegram\Bot\Api;
-	
+
 	$telegram = new Api('885752742:AAF63rND57OidzVAJ3ReDp7qGkX7oVaunBY');
 	$result = $telegram->getWebhookUpdates();
 	$text = $result["message"]["text"];
 	$chat_id = $result["message"]["chat"]["id"];
 	$name = $result["message"]["from"]["first_name"];
-	
-	
+
+
 	if($text) {
 		if ($text == '/start') {
 			if (strlen($name) == 0) {
@@ -58,38 +58,18 @@
 			if (strpos($text, 'http') === FALSE) {
 				$text = 'http://'.$text;
 			}
-			
+
 			if (strpos($text, 'bit.ly') === FALSE) {
 				$reply = getShortUrl($text);
 			}
 			else {
-				$reply = getLongUrl($text);	
+				$reply = getLongUrl($text);
 			}
 			$telegram->sendMessage([ 'chat_id' => $chat_id, 'text' => $reply]);
 
 			if ($reply != 'Ссылка некорректна') {
-				$db->where('chat_id', $chat_id);
-				$record = $db->getOne('user_request_history');
-				if (count($record)) {
-					$record[FIRST_REQUEST] = $record[SECOND_REQUEST];
-					$record[SECOND_REQUEST] = $record[THIRD_REQUEST];
-					$record[THIRD_REQUEST] = $record[FOURTH_REQUEST];
-					$record[FOURTH_REQUEST] = $record[FIFTH_REQUEST];
-					$record[FIFTH_REQUEST] = $reply;
-					$db->update('user_request_history', $record);
-				}
-				else {
-					$data = [
-						CHAT_ID => $chat_id,
-						FIRST_REQUEST => '<пусто>',
-						SECOND_REQUEST => '<пусто>',
-						THIRD_REQUEST => '<пусто>',
-						FOURTH_REQUEST => '<пусто>',
-						FIFTH_REQUEST => $reply
-					];
-					$db->insert('user_request_history', $data);
-				}
-			}			
+				updateHistory($reply, $chat_id);
+			}
 		}
 	}
 	else {
