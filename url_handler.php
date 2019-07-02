@@ -1,6 +1,10 @@
 <?php
 	include('globals.php');
 	
+	const LOGIN =  'o_4dkf0dhc6p';
+	const API_KEY =  'R_a9dbe6c319fe4397946c86b8798b7abb';
+	
+	const END_POINT =  'http://api.bit.ly/v3';
 	function getShortUrl($longUrl):string {
         $url = "http://api.bit.ly/shorten?version=2.0.1&longUrl=$longUrl&login=o_4dkf0dhc6p&apiKey=R_a9dbe6c319fe4397946c86b8798b7abb&format=json&history=1";
         $s = curl_init();
