@@ -10,11 +10,14 @@
 	const THIRD_REQUEST = 'third_request';
 	const FOURTH_REQUEST = 'fourth_request';
 	const FIFTH_REQUEST = 'fifth_request';
-	
-	$db = new MysqliDb (DB_HOST, DB_USER, DB_PASS, DB_NAME);
-	$db->autoReconnect = true;
-	
-	function updateHistory(&$lastAction, &$userId) {
+
+	function initDB(): MysqliDb {
+        $db = new MysqliDb (DB_HOST, DB_USER, DB_PASS, DB_NAME);
+        $db->autoReconnect = true;
+        return $db;
+    }
+
+	function updateHistory(MysqliDb $db, &$lastAction, &$userId) {
 		$db->where('chat_id', $userId);
 		$record = $db->getOne('user_request_history');
 		if (count($record)) {
