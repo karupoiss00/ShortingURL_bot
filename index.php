@@ -9,7 +9,7 @@
 	$text = $result["message"]["text"];
 	$chat_id = $result["message"]["chat"]["id"];
 	$name = $result["message"]["from"]["first_name"];
-
+    $db = initDB();
 
 	if($text) {
 		if ($text == '/start') {
@@ -68,7 +68,8 @@
 			$telegram->sendMessage([ 'chat_id' => $chat_id, 'text' => $reply]);
 
 			if ($reply != 'Ссылка некорректна') {
-				updateHistory($reply, $chat_id);
+
+				updateHistory($db, $reply, $chat_id);
 			}
 		}
 	}
