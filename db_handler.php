@@ -1,5 +1,6 @@
 <?php
 	require_once('vendor/autoload.php');
+	
 	const DB_HOST = 'us-cdbr-iron-east-02.cleardb.net';
 	const DB_USER = 'b8ee931ac989b3';
 	const DB_PASS = '672ff549';
@@ -12,14 +13,13 @@
 	const FIFTH_REQUEST = 'fifth_request';
 
 	function initDB(): MysqliDb {
-        $db = new MysqliDb (DB_HOST, DB_USER, DB_PASS, DB_NAME);
-        $db->autoReconnect = true;
-        return $db;
+		$db = new MysqliDb (DB_HOST, DB_USER, DB_PASS, DB_NAME);
+		$db->autoReconnect = true;
+		return $db;
     }
 
-	function updateHistory(MysqliDb $db, &$lastAction, &$userId) {
-		$db->where('chat_id', $userId);
-		$record = $db->getOne('user_request_history');
+	function updateHistory(MysqliDb $db, $lastAction, $userId) {
+		$record = getUserRow($db, $userId);
 		if (count($record)) {
 			$record[FIRST_REQUEST] = $record[SECOND_REQUEST];
 			$record[SECOND_REQUEST] = $record[THIRD_REQUEST];
@@ -39,4 +39,10 @@
 			];
 			$db->insert('user_request_history', $data);
 		}
+	}
+	
+	function getUserRow(MysqliDb $db, $userId): array {
+		$db->where(CHAT_ID, $userId);
+		$row = $db->getOne('user_request_history');
+		return $row;
 	}
