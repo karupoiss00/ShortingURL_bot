@@ -16,7 +16,7 @@
 		$db = new MysqliDb (DB_HOST, DB_USER, DB_PASS, DB_NAME);
 		$db->autoReconnect = true;
 		return $db;
-    }
+	}
 
 	function updateHistory(MysqliDb $db, $lastAction, $userId) {
 		$record = getUserRow($db, $userId);
@@ -26,7 +26,7 @@
 			$record[THIRD_REQUEST] = $record[FOURTH_REQUEST];
 			$record[FOURTH_REQUEST] = $record[FIFTH_REQUEST];
 			$record[FIFTH_REQUEST] = $lastAction;
-			$db->update('user_request_history', $record);
+			updateUserRow($db, $record);
 		}
 		else {
 			$data = [
@@ -47,6 +47,6 @@
 		return $row;
 	}
 	
-	function insertUserRow(MysqliDb $db, $row): array {
-		$db->insert('user_request_history', $row);
+	function updateUserRow(MysqliDb $db, $row): array {
+		$db->update('user_request_history', $row);
 	}
