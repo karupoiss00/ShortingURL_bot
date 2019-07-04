@@ -31,7 +31,7 @@
 		}
 		else {
 			$data = [
-				CHAT_ID => $chat_id,
+				CHAT_ID => $userId,
 				FIRST_REQUEST => EMPTY_SLOT,
 				SECOND_REQUEST => EMPTY_SLOT,
 				THIRD_REQUEST => EMPTY_SLOT,
@@ -49,7 +49,7 @@
 		}
 		else {
 			$data = [
-				CHAT_ID => $chat_id,
+				CHAT_ID => $userId,
 				FIRST_REQUEST => EMPTY_SLOT,
 				SECOND_REQUEST => EMPTY_SLOT,
 				THIRD_REQUEST => EMPTY_SLOT,
