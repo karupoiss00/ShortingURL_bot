@@ -11,7 +11,8 @@
 	const THIRD_REQUEST = 'third_request';
 	const FOURTH_REQUEST = 'fourth_request';
 	const FIFTH_REQUEST = 'fifth_request';
-
+	const EMPTY_SLOT = '<пусто>';
+	
 	function initDB(): MysqliDb {
 		$db = new MysqliDb (DB_HOST, DB_USER, DB_PASS, DB_NAME);
 		$db->autoReconnect = true;
@@ -31,10 +32,10 @@
 		else {
 			$data = [
 				CHAT_ID => $chat_id,
-				FIRST_REQUEST => '<пусто>',
-				SECOND_REQUEST => '<пусто>',
-				THIRD_REQUEST => '<пусто>',
-				FOURTH_REQUEST => '<пусто>',
+				FIRST_REQUEST => EMPTY_SLOT,
+				SECOND_REQUEST => EMPTY_SLOT,
+				THIRD_REQUEST => EMPTY_SLOT,
+				FOURTH_REQUEST => EMPTY_SLOT,
 				FIFTH_REQUEST => $lastAction
 			];
 			insertRow($db, $data);
@@ -49,11 +50,11 @@
 		else {
 			$data = [
 				CHAT_ID => $chat_id,
-				FIRST_REQUEST => '<пусто>',
-				SECOND_REQUEST => '<пусто>',
-				THIRD_REQUEST => '<пусто>',
-				FOURTH_REQUEST => '<пусто>',
-				FIFTH_REQUEST => '<пусто>'
+				FIRST_REQUEST => EMPTY_SLOT,
+				SECOND_REQUEST => EMPTY_SLOT,
+				THIRD_REQUEST => EMPTY_SLOT,
+				FOURTH_REQUEST => EMPTY_SLOT,
+				FIFTH_REQUEST => EMPTY_SLOT
 			];
 			insertRow($db, $data);
 			return formatRowToStr($data);
