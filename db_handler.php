@@ -69,7 +69,7 @@
 		return $res;
 	}
 	
-	function getRow(MysqliDb $db, $userId): array {
+	function getRow(MysqliDb $db, $userId): {
 		$db->where(CHAT_ID, $userId);
 		$row = $db->getOne('user_request_history');
 		return $row;
