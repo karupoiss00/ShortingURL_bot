@@ -45,7 +45,7 @@
 	
 	function urlHandle($db, $userId, $url) {
 		if (strpos($url, 'http') === false) {
-			$text = 'http://'.$text;
+			$url = 'http://'.$text;
 		}
 		
 		if (strpos($url, 'bit.ly') === false) {
