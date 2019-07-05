@@ -31,23 +31,8 @@
 			$telegram->sendMessage([ 'chat_id' => $chat_id, 'text' => $reply ]);
 		}
 		else {
-			if (strpos($text, 'http') === FALSE) {
-				$text = 'http://'.$text;
-			}
-
-			if (strpos($text, 'bit.ly') === FALSE) {
-				$reply = getShortUrl($text);
-			}
-			else {
-				$reply = getLongUrl($text);
-			}
-			
-			$telegram->sendMessage([ 'chat_id' => $chat_id, 'text' => $reply]);
-
-			if ($reply != ERROR_MESS) {
-
-				updateHistory($db, $reply, $chat_id);
-			}
+			$reply = urlHandle($text);
+			$telegram->sendMessage([ 'chat_id' => $chat_id, 'text' => $reply]);	
 		}
 	}
 	else {
