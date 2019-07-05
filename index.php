@@ -31,7 +31,7 @@
 			$telegram->sendMessage([ 'chat_id' => $chat_id, 'text' => $reply ]);
 		}
 		else {
-			$reply = urlHandle($text);
+			$reply = urlHandle($db, $chat_id, $text);
 			$telegram->sendMessage([ 'chat_id' => $chat_id, 'text' => $reply]);	
 		}
 	}
