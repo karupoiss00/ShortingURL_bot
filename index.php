@@ -12,7 +12,7 @@
 	$text = $result["message"]["text"];
 	$chat_id = $result["message"]["chat"]["id"];
 	$name = $result["message"]["from"]["first_name"];
-    $db = initDB();
+	$db = initDB();
 
 	if($text) {
 		if ($text == START_COMMAND) {
