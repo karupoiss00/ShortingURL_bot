@@ -15,4 +15,7 @@
 	const END_POINT =  'http://api.bit.ly/v3';
 	const ERROR_MESSAGE = 'Ссылка некорректна';
 	const HELP_REPLY = 'Данный бот предназначен для работы со ссылками. Он умеет сокращать или расшифровывать уже сокращённые ссылки. Для того, чтобы воспользоваться ботом, отправьте ему ссылку, которую необходимо сократить. Для просмотра последних действий, воспользуйтесь командой /history';
-	
+	const START_COMMAND = '/start';
+	const HELP_COMMAND = '/help';
+	const HISTORY_COMMAND = '/history';
+	const SEND_ME_TEXT = 'Отправьте текстовое сообщение.';

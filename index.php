@@ -3,6 +3,7 @@
 	require_once('url_handler.php');
 	require_once('db_handler.php');
 	require_once('config.php');
+	require_once('functions.php');
 	
 	use Telegram\Bot\Api;
 
@@ -14,20 +15,15 @@
     $db = initDB();
 
 	if($text) {
-		if ($text == '/start') {
-			if (strlen($name)) {
-				$reply = 'Добро пожаловать, '.$name.'!';		
-			}
-			else {
-				$reply = 'Добро пожаловать, Незнакомец!';
-			}
+		if ($text == START_COMMAND) {
+			$reply = parseGreeting($name);
 			$telegram->sendMessage([ 'chat_id' => $chat_id, 'text' => $reply]);
 		}
-		elseif ($text == '/help') {
+		elseif ($text == HELP_COMMAND) {
 			$reply = HELP_REPLY;
 			$telegram->sendMessage([ 'chat_id' => $chat_id, 'text' => $reply ]);
 		}
-		elseif ($text == '/history') {
+		elseif ($text == HISTORY_COMMAND) {
 			$reply = getUserHistory($db, $chat_id);
 			$telegram->sendMessage([ 'chat_id' => $chat_id, 'text' => $reply ]);
 		}
@@ -37,5 +33,5 @@
 		}
 	}
 	else {
-		$telegram->sendMessage([ 'chat_id' => $chat_id, 'text' => 'Отправьте текстовое сообщение.' ]);
+		$telegram->sendMessage([ 'chat_id' => $chat_id, 'text' => SEND_ME_TEXT ]);
 	}
