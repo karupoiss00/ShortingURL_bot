@@ -2,6 +2,7 @@
 	require_once('vendor/autoload.php');
 	require_once('url_handler.php');
 	require_once('db_handler.php');
+	require_once('config.php');
 	
 	use Telegram\Bot\Api;
 

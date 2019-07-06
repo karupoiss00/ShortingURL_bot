@@ -1,11 +1,6 @@
 <?php
 	require_once('db_handler.php');
-	
-	const LOGIN =  'o_4dkf0dhc6p';
-	const API_KEY =  'R_a9dbe6c319fe4397946c86b8798b7abb';
-	const END_POINT =  'http://api.bit.ly/v3';
-	const ERROR_MESSAGE = 'Ссылка некорректна';
-	const HELP_REPLY = 'Данный бот предназначен для работы со ссылками. Он умеет сокращать или расшифровывать уже сокращённые ссылки. Для того, чтобы воспользоваться ботом, отправьте ему ссылку, которую необходимо сократить. Для просмотра последних действий, воспользуйтесь командой /history';
+	require_once('config.php');
 	
 	function getShortUrl($longUrl):string {
 		$url = "http://api.bit.ly/shorten?version=2.0.1&longUrl=$longUrl&login=o_4dkf0dhc6p&apiKey=R_a9dbe6c319fe4397946c86b8798b7abb&format=json&history=1";
@@ -45,7 +40,7 @@
 	
 	function urlHandle($db, $userId, $url) {
 		if (strpos($url, 'http') === false) {
-			$url = 'http://'.$text;
+			$url = 'http://'.$url;
 		}
 		
 		if (strpos($url, 'bit.ly') === false) {
