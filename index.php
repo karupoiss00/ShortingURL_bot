@@ -3,7 +3,7 @@
 	require_once('url_handler.php');
 	require_once('db_handler.php');
 	require_once('config.php');
-	require_once('functions.php');
+	require_once('greeting.php');
 	
 	use Telegram\Bot\Api;
 
@@ -14,14 +14,13 @@
 	$name = $result["message"]["from"]["first_name"];
 	$db = initDB();
 
-	if($text) {
+	if ($text) {
 		if ($text == START_COMMAND) {
 			$reply = parseGreeting($name);
 			$telegram->sendMessage([ 'chat_id' => $chat_id, 'text' => $reply]);
 		}
 		elseif ($text == HELP_COMMAND) {
-			$reply = HELP_REPLY;
-			$telegram->sendMessage([ 'chat_id' => $chat_id, 'text' => $reply ]);
+			$telegram->sendMessage([ 'chat_id' => $chat_id, 'text' => HELP_REPLY ]);
 		}
 		elseif ($text == HISTORY_COMMAND) {
 			$reply = getUserHistory($db, $chat_id);
